@@ -3,6 +3,20 @@
 const Meetup = use("App/Models/Meetup");
 
 class MeetupController {
+  async store({ request }) {
+    const data = request.only([
+      "title",
+      "description",
+      "location",
+      "img",
+      "theme_id"
+    ]);
+
+    const meetup = await Meetup.create(data);
+
+    return meetup;
+  }
+
   async show({ params }) {
     const meetup = await Meetup.findOrFail(params.id);
 
@@ -13,6 +27,13 @@ class MeetupController {
     const meetups = await Meetup.all();
 
     return meetups;
+  }
+
+  async findByTitle({ request }) {
+    const param = request.only(["title"]);
+    const meetup = await Meetup.findByOrFail("title", param.title);
+
+    return meetup;
   }
 
   /**

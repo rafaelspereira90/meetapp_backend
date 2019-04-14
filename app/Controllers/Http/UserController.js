@@ -10,6 +10,18 @@ class UserController {
 
     return user;
   }
+
+  async update({ params, request }) {
+    const data = request.only(["username", "password"]);
+
+    const user = await User.findOrFail(params.id);
+
+    user.merge(data);
+
+    await user.save();
+
+    return user;
+  }
 }
 
 module.exports = UserController;

@@ -1,93 +1,39 @@
-'use strict'
+"use strict";
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const MeetupRegistration = use("App/Models/MeetupRegistration");
+const Meetup = use("App/Models/Meetup");
 
 /**
  * Resourceful controller for interacting with meetupregistrations
  */
 class MeetupRegistrationController {
-  /**
-   * Show a list of all meetupregistrations.
-   * GET meetupregistrations
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async store({ request }) {
+    const data = request.only(["user_id", "meetup_id"]);
+
+    const meetupRegistration = await MeetupRegistration.create(data);
+
+    return meetupRegistration;
   }
 
-  /**
-   * Render a form to be used for creating a new meetupregistration.
-   * GET meetupregistrations/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
+  async show({ params }) {
+    const listaMeetups = await MeetupRegistration.query()
+      .where("user_id", params.id)
+      .fetch();
 
-  /**
-   * Create/save a new meetupregistration.
-   * POST meetupregistrations
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+    /* const meetupids = listaMeetups.map(function(elem) {
+      return meetup_id;
+    });
 
-  /**
-   * Display a single meetupregistration.
-   * GET meetupregistrations/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+     return await Meetup.query()
+      .where("id", elem.id)
+      .fetch(); */
 
-  /**
-   * Render a form to update an existing meetupregistration.
-   * GET meetupregistrations/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+    /*const meetups = await Meetup.query()
+      .where("id", a.id)
+      .fetch();*/
 
-  /**
-   * Update meetupregistration details.
-   * PUT or PATCH meetupregistrations/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a meetupregistration with id.
-   * DELETE meetupregistrations/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return listaMeetups;
   }
 }
 
-module.exports = MeetupRegistrationController
+module.exports = MeetupRegistrationController;
